@@ -1,0 +1,33 @@
+meta {
+  name: Multi pump simple
+  type: http
+  seq: 1
+}
+
+post {
+  url: 127.0.0.1:8000/actions
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "pumpA": {
+    "state": true,
+    "dir": true,
+    "speed": 800
+    },
+    "pumpB": {
+    "state": true,
+    "dir": true,
+    "speed": 800
+    },
+    "pumpC": {
+    "state": true,
+    "dir": true,
+    "speed": 800
+    },
+    "id": "1",
+    "time": 300
+  }
+}
