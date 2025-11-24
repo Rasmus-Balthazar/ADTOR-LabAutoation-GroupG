@@ -95,7 +95,7 @@ def main(checkPoint=None):
     print(result)
 
     plt.subplots(figsize=(7, 7))
-    plot_convergence(result);
+    plot_convergence(result)
     plt.pause(0.5)
     plt.show()
 

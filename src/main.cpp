@@ -111,10 +111,10 @@ void loop()
   cmdMessenger.feedinSerialData();
   if (currentStep.state)
   {
-    Serial.println("Entering queue");
+    // Serial.println("Entering queue");
     if (!currentStep.done)
     {
-      Serial.println("Step not done");
+      // Serial.println("Step not done");
       if (millis() - currentStep.stepStartTime >= currentStep.time)
       {
         currentStep.done = true;
@@ -138,6 +138,14 @@ void returnState()
   cmdMessenger.sendCmdBinArg<uint16_t>(pumpA.speed);
   cmdMessenger.sendCmdBinArg<bool>(pumpA.dir);
 
+  cmdMessenger.sendCmdBinArg<bool>(pumpB.state);
+  cmdMessenger.sendCmdBinArg<uint16_t>(pumpB.speed);
+  cmdMessenger.sendCmdBinArg<bool>(pumpB.dir);
+
+  cmdMessenger.sendCmdBinArg<bool>(pumpC.state);
+  cmdMessenger.sendCmdBinArg<uint16_t>(pumpC.speed);
+  cmdMessenger.sendCmdBinArg<bool>(pumpC.dir);
+
   cmdMessenger.sendCmdEnd();
 }
 
@@ -153,6 +161,14 @@ void returnLastStep()
   cmdMessenger.sendCmdBinArg<bool>(currentStep.stateA);
   cmdMessenger.sendCmdBinArg<uint16_t>(currentStep.speedA);
   cmdMessenger.sendCmdBinArg<bool>(currentStep.dirA);
+
+  cmdMessenger.sendCmdBinArg<bool>(currentStep.stateB);
+  cmdMessenger.sendCmdBinArg<uint16_t>(currentStep.speedB);
+  cmdMessenger.sendCmdBinArg<bool>(currentStep.dirB);
+
+  cmdMessenger.sendCmdBinArg<bool>(currentStep.stateC);
+  cmdMessenger.sendCmdBinArg<uint16_t>(currentStep.speedC);
+  cmdMessenger.sendCmdBinArg<bool>(currentStep.dirC);
 
   cmdMessenger.sendCmdEnd();
 }

@@ -6,7 +6,7 @@ import time
 from typing import Set
 import json
 
-from action_models import ActionRequest
+from action_models import ActionRequest, PumpCommand
 
 import asyncio
 import os
@@ -40,7 +40,7 @@ async def perform_actions(request: ActionRequest, background_tasks: BackgroundTa
     return {"status": "accepted", "id": request.id}
 
 # --- Helper methods ---
-def send_command_to_hardware(pumpA, pumpB, pumpC, duration):
+def send_command_to_hardware(pumpA: PumpCommand, pumpB: PumpCommand, pumpC: PumpCommand, duration: int):
     # Extract pump parameters
     stateA = pumpA.state if pumpA else False
     speedA = pumpA.speed if pumpA else 0
@@ -109,9 +109,9 @@ def monitor_operations(job_id, pumpA, step_time):
 # --- Unified background task ---
 def action_task(request: ActionRequest):
     job_id = request.id
-    pumpA = request.pumpA
-    pumpB = request.pumpB
-    pumpC = request.pumpC
+    pumpA: PumpCommand = request.pumpA
+    pumpB: PumpCommand = request.pumpB
+    pumpC: PumpCommand = request.pumpC
     duration = request.time
       # Send motor command
     step_time = send_command_to_hardware(pumpA=pumpA, pumpB=pumpB, pumpC=pumpC, duration=duration)
