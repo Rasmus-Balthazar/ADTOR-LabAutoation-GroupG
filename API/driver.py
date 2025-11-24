@@ -58,7 +58,8 @@ class RealMicrocontrollerService:
                     # Command to stop all pumps
                     ["kStop", ""],
                     ["kStepDone", ""],
-                    ["kGetSensorReadings", "III"],]
+                    ["kGetSensorReadings", ""],
+                    ["sensorReadingsResponse", "III"],]
 
         # Initialize the messenger
         self.comm = PyCmdMessenger.CmdMessenger(ESP32, commands)
@@ -184,9 +185,19 @@ class RealMicrocontrollerService:
         try:
             msg = self.comm.receive()
 
-            result = msg[1]
-            log.info(f"Current sensor readings: {result}")
-            return result
+            # `msg` can have several shapes depending on PyCmdMessenger/Arduino usage:
+            # - (commandName, [a, b, c])
+            # - (commandName, a, b, c)
+            # - (commandName, a) where a is a list
+            if msg is None:
+                log.warning("No message received for sensor readings")
+                return []
+
+            # Everything after index 0 are the payload parts
+            readings = msg[1]
+
+            log.info(f"Current sensor readings: {readings}")
+            return readings
         except Exception as e:
             log.error(f"Error during sensor reading: {str(e)}")
 
