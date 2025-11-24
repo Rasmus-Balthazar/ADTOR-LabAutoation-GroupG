@@ -11,6 +11,7 @@ import asyncio
 import os
 import httpx
 
+    
 app = FastAPI()
 micro = RealMicrocontrollerService()
 

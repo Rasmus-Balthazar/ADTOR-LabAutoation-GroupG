@@ -89,7 +89,8 @@ void OnReceiveStop()
   receiveStop();
 }
 
-void setup() {
+void setup()
+{
 
   Serial.begin(115200);
   setupPumps();
@@ -102,10 +103,10 @@ void setup() {
   attachCommandCallbacks();
 
   cmdMessenger.sendCmd(kAcknowledge, "Arduino has started!");
- 
 }
 
-void loop() {
+void loop()
+{
 
   cmdMessenger.feedinSerialData();
   if (currentStep.state)
@@ -127,7 +128,6 @@ void loop() {
       Serial.println("Deactivating queue and clearing after done");
     }
   }
-
 }
 
 void returnState()
@@ -207,9 +207,7 @@ void receiveStop()
 {
 
   stopPumps();
-  
   currentStep.done = true;
   currentStep.state = false;
   cmdMessenger.sendCmd(kAcknowledge, "Stopped");
 }
-
