@@ -1,5 +1,0 @@
-# Core dependencies for MOZART Python Command Driver
-pyserial>=3.5
-PyCmdMessenger>=0.2.4
-
-

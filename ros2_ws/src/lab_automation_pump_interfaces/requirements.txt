@@ -1,2 +1,0 @@
-pyserial
-PyCmdMessenger>=0.2.4
