@@ -6,6 +6,7 @@
 .vscode/ipch
 .DS_STORE
 *.cpython
+documentation_examples
 
 
 # Python Gitignore
