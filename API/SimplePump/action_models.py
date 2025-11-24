@@ -10,3 +10,5 @@ class ActionRequest(BaseModel):
     id: str
     time: int = 10000  # ms
     pumpA: Optional[PumpCommand] = None 
+    pumpB: Optional[PumpCommand] = None 
+    pumpC: Optional[PumpCommand] = None 

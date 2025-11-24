@@ -1,1 +1,2 @@
-# ADTOR-LabAutoation-GroupG
+# LabAutomationKits
+Documentation and code for the lab automation teaching kit

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import uvicorn
 from driver import RealMicrocontrollerService, get_logger
 
 import time
@@ -38,9 +39,13 @@ def send_command_to_hardware(pumpA, duration):
 def action_task(request: ActionRequest):
     job_id = request.id
     pumpA = request.pumpA
+    pumpB = request.pumpB
+    pumpC = request.pumpC
     duration = request.time
       # Send motor command
     step_time = send_command_to_hardware(pumpA, duration)
+    step_time = send_command_to_hardware(pumpB, duration)
+    step_time = send_command_to_hardware(pumpC, duration)
 
 @app.post("/actions")
 async def perform_actions(request: ActionRequest):
@@ -68,3 +73,5 @@ def get_status():
     global busy
     return {"busy": busy} 
 
+if __name__ =="__main__":
+    uvicorn.run(app, port=8000)

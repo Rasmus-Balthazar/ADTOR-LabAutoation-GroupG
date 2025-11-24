@@ -9,7 +9,7 @@ def find_port(device_id=None):
     """
     if platform.system() == "Windows":
         # Hardcode the COM port for Windows
-        return True, "COM14"
+        return True, "COM8"
     ports = serial.tools.list_ports.comports()
     for port in ports:
         if device_id:

@@ -10,15 +10,15 @@ void setup() {
 }
 
 void loop() {
-  delay(3000);
-  Serial.println("Starting pump A forward at full speed for 3 seconds");
-  StartPumpA(4096, HIGH);
+  // delay(3000);
+  // Serial.println("Starting pump A forward at full speed for 3 seconds");
+  // StartPumpA(4096, HIGH);
 
-  delay(3000);
-  Serial.println("Starting pump A forward at half speed for 3 seconds");
-  StartPumpA(2048, HIGH);
+  // delay(3000);
+  // Serial.println("Starting pump A forward at half speed for 3 seconds");
+  // StartPumpA(2048, HIGH);
 
-  delay(3000);
-  stopPumps();
-  Serial.println("Pumps stopped");
+  // delay(3000);
+  // stopPumps();
+  // Serial.println("Pumps stopped");
 }

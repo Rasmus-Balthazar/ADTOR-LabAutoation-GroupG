@@ -1,6 +1,6 @@
-fastapi[standard]
+fastapi
+uvicorn
 pyserial
 pydantic
 httpx
 websockets 
-PyCmdMessenger>=0.2.4

@@ -91,7 +91,7 @@ def main():
     tile = RealMicrocontrollerService()
     tile.start_pumps(stateA = True, speedA = 4096, dirA = True)
     
-    time.sleep(5)
+    time.sleep(.5)
 
     tile.stopPumps()
 
