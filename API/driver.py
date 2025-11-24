@@ -11,7 +11,7 @@ def get_logger(name):
 log = get_logger(__name__)
 
 class RealMicrocontrollerService:
-    """
+    """¨
     The actual microcontroller service for connecting to hardware.
     """
 
@@ -30,17 +30,35 @@ class RealMicrocontrollerService:
         ESP32 = PyCmdMessenger.ArduinoBoard(comPort, baud_rate=115200, timeout=3)
         log.debug(f"Using board: {ESP32}")
 
-        commands = [["kWatchdog", "s"],
-                    ["kAcknowledge", "s"],
-                    ["kError", "s"],
+        commands = [
+                    # Command to request application ID
+                    ["kWatchdog", "s"], # Unimplemented
+                    
+                    # Command to acknowledge a received command
+                    ["kAcknowledge", "s"], # Unimplemented
+                    
+                    # Command to message that an error has occurred
+                    ["kError", "s"], # Unimplemented
+                    
+                    # Command to get the pump states
                     ["kGetState", ""],
-                    ["kGetStateResult", "?I?"],
+                    
+                    # Command to send the full state of the pumps
+                    ["kGetStateResult", "?I?"], # Unimplemented
+                    
+                    # Command to get the current step
                     ["kGetLastStep", ""],
-                    ["kGetLastStepResult", "??L?I?"],
+                    
+                    # Command to send the current step
+                    ["kGetLastStepResult", "??L?I??I??I?"], # Unimplemented
+                    
+                    # Command to receive a step (pump state + time), should always contain the full state of the pumps
                     ["kStep", "?I??I??I?L"], #Changed to match new number of arguments in set_state
+                    
+                    # Command to stop all pumps
                     ["kStop", ""],
                     ["kStepDone", ""],
-                    ["kGetSensorReadings", ""],]
+                    ["kGetSensorReadings", "III"],]
 
         # Initialize the messenger
         self.comm = PyCmdMessenger.CmdMessenger(ESP32, commands)
@@ -163,12 +181,14 @@ class RealMicrocontrollerService:
         self.comm.send("kGetSensorReadings")
 
         # Receive reading data
-        msg = self.comm.receive()
+        try:
+            msg = self.comm.receive()
 
-        result = msg[1]
-        log.info(f"Current state: {result}")
-
-        return result
+            result = msg[1]
+            log.info(f"Current sensor readings: {result}")
+            return result
+        except Exception as e:
+            log.error(f"Error during sensor reading: {str(e)}")
 
     def close(self):
         """

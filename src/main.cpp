@@ -17,6 +17,7 @@ void OnGetState();
 void OnGetLastStep();
 void OnReceiveStep();
 void OnReceiveStop();
+void GetSensorReadings();
 
 void returnState();
 void returnLastStep();
@@ -51,6 +52,7 @@ void attachCommandCallbacks()
   cmdMessenger.attach(kGetLastStep, OnGetLastStep);
   cmdMessenger.attach(kStep, OnReceiveStep);
   cmdMessenger.attach(kStop, OnReceiveStop);
+  cmdMessenger.attach(kGetSensorReadings, GetSensorReadings);
 }
 
 // ------------------  C A L L B A C K S -----------------------
@@ -93,6 +95,32 @@ void OnReceiveStop()
   receiveStop();
 }
 
+void GetSensorReadings()
+{
+  uint16_t myData[ksfAS7343NumChannels]; // Array to hold spectral data
+  int channelsRead = mySensor.getData(myData);
+  for (int channel = 0; channel < channelsRead; channel++)
+  {
+      Serial.print(myData[channel]);
+      Serial.print(",");
+  }
+  
+  uint16_t blue = mySensor.getBlue();
+  Serial.print(blue);
+  uint16_t red = mySensor.getRed();
+  Serial.print(red);
+  uint16_t green = mySensor.getGreen();
+  Serial.print(green);
+  
+  cmdMessenger.sendCmdStart(kGetSensorReadings);
+
+  cmdMessenger.sendCmdBinArg<uint16_t>(blue);
+  cmdMessenger.sendCmdBinArg<uint16_t>(red);
+  cmdMessenger.sendCmdBinArg<uint16_t>(green);
+  
+  cmdMessenger.sendCmdEnd();
+}
+
 void setup()
 {
 
@@ -106,11 +134,57 @@ void setup()
   // Attach my application's user-defined callback methods
   attachCommandCallbacks();
 
+  Serial.println("AS7343 Example 02 - All Channels");
+
+  Wire.begin();
+
+  // Initialize sensor and run default setup.
+  if (mySensor.begin() == false)
+  {
+      Serial.println("Sensor failed to begin. Please check your wiring!");
+      Serial.println("Halting...");
+      while (1)
+          ;
+  }
+
+  Serial.println("Sensor began.");
+
+  // Power on the device
+  if (mySensor.powerOn() == false)
+  {
+      Serial.println("Failed to power on the device.");
+      Serial.println("Halting...");
+      while (1)
+          ;
+  }
+  Serial.println("Device powered on.");
+
+  // Set the AutoSmux to output all 18 channels
+  if (mySensor.setAutoSmux(AUTOSMUX_18_CHANNELS) == false)
+  {
+      Serial.println("Failed to set AutoSmux.");
+      Serial.println("Halting...");
+      while (1)
+          ;
+  }
+  Serial.println("AutoSmux set to 18 channels.");
+
+  // Enable Spectral Measurement
+  if (mySensor.enableSpectralMeasurement() == false)
+  {
+      Serial.println("Failed to enable spectral measurement.");
+      Serial.println("Halting...");
+      while (1)
+          ;
+  }
+  Serial.println("Spectral measurement enabled.");
+
   cmdMessenger.sendCmd(kAcknowledge, "Arduino has started!");
 }
 
 void loop()
 {
+  mySensor.ledOn();
 
   cmdMessenger.feedinSerialData();
   if (currentStep.state)
@@ -132,6 +206,8 @@ void loop()
       Serial.println("Deactivating queue and clearing after done");
     }
   }
+
+  mySensor.ledOff();
 }
 
 void returnState()

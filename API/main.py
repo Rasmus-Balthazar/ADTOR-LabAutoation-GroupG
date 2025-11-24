@@ -39,6 +39,13 @@ async def perform_actions(request: ActionRequest, background_tasks: BackgroundTa
     background_tasks.add_task(action_task, request)
     return {"status": "accepted", "id": request.id}
 
+@app.get("/sensor_readings")
+async def get_sensor_readings():
+    readings = micro.get_sensor_readings()
+    log.info(f"Fetched readings are: {readings}")
+    return {"readings": readings}
+
+
 # --- Helper methods ---
 def send_command_to_hardware(pumpA: PumpCommand, pumpB: PumpCommand, pumpC: PumpCommand, duration: int):
     # Extract pump parameters
@@ -117,6 +124,7 @@ def action_task(request: ActionRequest):
     step_time = send_command_to_hardware(pumpA=pumpA, pumpB=pumpB, pumpC=pumpC, duration=duration)
     # Monitor operation
     monitor_operations(job_id, pumpA, step_time)
+
 
 @app.post("/stop")
 async def emergency_stop():
