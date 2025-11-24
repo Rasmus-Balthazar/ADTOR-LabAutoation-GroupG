@@ -2,8 +2,11 @@
 #include <CmdMessenger.h>
 #include "dataModel.h"
 #include "df4MotorDriver.h"
+#include <SparkFun_AS7343.h>
 
 CmdMessenger cmdMessenger(Serial, ',', ';', '/');
+
+SfeAS7343ArdI2C mySensor;
 
 // This is the list of recognized commands. These can be commands that can either be sent or received.
 // In order to receive, attach a callback function to these events
@@ -33,6 +36,7 @@ enum
   kStep,              // Command to receive a step (pump state + time), should always contain the full state of the pumps
   kStop,              // Command to stop all pumps
   kStepDone,          // Command to signal a step done
+  kGetSensorReadings, // Command to get sensor readings
 
 };
 

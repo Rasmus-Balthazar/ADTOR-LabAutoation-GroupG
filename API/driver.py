@@ -39,7 +39,8 @@ class RealMicrocontrollerService:
                     ["kGetLastStepResult", "??L?I?"],
                     ["kStep", "?I??I??I?L"], #Changed to match new number of arguments in set_state
                     ["kStop", ""],
-                    ["kStepDone", ""], ]
+                    ["kStepDone", ""],
+                    ["kGetSensorReadings", ""],]
 
         # Initialize the messenger
         self.comm = PyCmdMessenger.CmdMessenger(ESP32, commands)
@@ -155,6 +156,19 @@ class RealMicrocontrollerService:
         except EOFError as e:
             log.warning(f"Incomplete message when checking for step done: {e}")
         return False
+
+    def get_sensor_readings(self) -> list[int]:
+        log.info("Getting sensor readings")
+        result = []
+        self.comm.send("kGetSensorReadings")
+
+        # Receive reading data
+        msg = self.comm.receive()
+
+        result = msg[1]
+        log.info(f"Current state: {result}")
+
+        return result
 
     def close(self):
         """
