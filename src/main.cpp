@@ -27,18 +27,18 @@ void receiveStop();
 enum
 {
   // Commands
-  kWatchdog,          // Command to request application ID
-  kAcknowledge,       // Command to acknowledge a received command
-  kError,             // Command to message that an error has occurred
-  kGetState,          // Command to get the pump states
-  kGetStateResult,    // Command to send the full state of the pumps
-  kGetLastStep,       // Command to get the current step
-  kGetLastStepResult, // Command to send the current step
-  kStep,              // Command to receive a step (pump state + time), should always contain the full state of the pumps
-  kStop,              // Command to stop all pumps
-  kStepDone,          // Command to signal a step done
-  kGetSensorReadings, // Command to get sensor readings
-
+  kWatchdog,              // Command to request application ID
+  kAcknowledge,           // Command to acknowledge a received command
+  kError,                 // Command to message that an error has occurred
+  kGetState,              // Command to get the pump states
+  kGetStateResult,        // Command to send the full state of the pumps
+  kGetLastStep,           // Command to get the current step
+  kGetLastStepResult,     // Command to send the current step
+  kStep,                  // Command to receive a step (pump state + time), should always contain the full state of the pumps
+  kStop,                  // Command to stop all pumps
+  kStepDone,              // Command to signal a step done
+  kGetSensorReadings,     // Command to get sensor readings
+  sensorReadingsResponse, // Response to get sensor readings
 };
 
 // Commands we send from the PC and want to receive on the Arduino.
@@ -107,7 +107,7 @@ void GetSensorReadings()
   cmdMessenger.sendCmdBinArg<uint16_t>(blue);
   cmdMessenger.sendCmdBinArg<uint16_t>(red);
   cmdMessenger.sendCmdBinArg<uint16_t>(green);
-  
+
   cmdMessenger.sendCmdEnd();
 }
 
@@ -131,10 +131,10 @@ void setup()
   // Initialize sensor and run default setup.
   if (mySensor.begin() == false)
   {
-      Serial.println("Sensor failed to begin. Please check your wiring!");
-      Serial.println("Halting...");
-      while (1)
-          ;
+    Serial.println("Sensor failed to begin. Please check your wiring!");
+    Serial.println("Halting...");
+    while (1)
+      ;
   }
 
   Serial.println("Sensor began.");
@@ -142,30 +142,30 @@ void setup()
   // Power on the device
   if (mySensor.powerOn() == false)
   {
-      Serial.println("Failed to power on the device.");
-      Serial.println("Halting...");
-      while (1)
-          ;
+    Serial.println("Failed to power on the device.");
+    Serial.println("Halting...");
+    while (1)
+      ;
   }
   Serial.println("Device powered on.");
 
   // Set the AutoSmux to output all 18 channels
   if (mySensor.setAutoSmux(AUTOSMUX_18_CHANNELS) == false)
   {
-      Serial.println("Failed to set AutoSmux.");
-      Serial.println("Halting...");
-      while (1)
-          ;
+    Serial.println("Failed to set AutoSmux.");
+    Serial.println("Halting...");
+    while (1)
+      ;
   }
   Serial.println("AutoSmux set to 18 channels.");
 
   // Enable Spectral Measurement
   if (mySensor.enableSpectralMeasurement() == false)
   {
-      Serial.println("Failed to enable spectral measurement.");
-      Serial.println("Halting...");
-      while (1)
-          ;
+    Serial.println("Failed to enable spectral measurement.");
+    Serial.println("Halting...");
+    while (1)
+      ;
   }
   Serial.println("Spectral measurement enabled.");
 
