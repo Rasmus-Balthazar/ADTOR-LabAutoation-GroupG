@@ -104,9 +104,9 @@ void GetSensorReadings()
   uint16_t green = mySensor.getGreen();
 
   cmdMessenger.sendCmdStart(sensorReadingsResponse);
-  cmdMessenger.sendCmdBinArg<uint16_t>(blue);
   cmdMessenger.sendCmdBinArg<uint16_t>(red);
   cmdMessenger.sendCmdBinArg<uint16_t>(green);
+  cmdMessenger.sendCmdBinArg<uint16_t>(blue);
 
   cmdMessenger.sendCmdEnd();
 }
