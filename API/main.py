@@ -83,9 +83,9 @@ def handle_stop(job_id):
     except Exception as e:
         log.error(f"Error fetching state after stopping everything: {e}")
 
-def monitor_operations(job_id, pumpA, step_time):
+def monitor_operations(job_id, pumps, step_time):
     global busy, stop_requested
-    pump_done = False if (pumpA) else True
+    pump_done = False if (any(pumps)) else True
     start_time = time.time()
     
     interval = 0.1
@@ -123,7 +123,7 @@ def action_task(request: ActionRequest):
       # Send motor command
     step_time = send_command_to_hardware(pumpA=pumpA, pumpB=pumpB, pumpC=pumpC, duration=duration)
     # Monitor operation
-    monitor_operations(job_id, pumpA, step_time)
+    monitor_operations(job_id, [pumpA, pumpB, pumpC], step_time)
 
 
 @app.post("/stop")
