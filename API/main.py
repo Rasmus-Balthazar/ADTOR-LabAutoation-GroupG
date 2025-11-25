@@ -138,7 +138,8 @@ async def emergency_stop():
 @app.get("/status")
 def get_status():
     global busy
-    return {"busy": busy} 
+    status = 503 if busy else 200
+    return {"busy": busy}, status
 
 if __name__ =="__main__":
     uvicorn.run(app, port=8000)
