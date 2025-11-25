@@ -106,13 +106,10 @@ void GetSensorReadings()
   }
   
   uint16_t blue = mySensor.getBlue();
-  Serial.print(blue);
   uint16_t red = mySensor.getRed();
-  Serial.print(red);
   uint16_t green = mySensor.getGreen();
-  Serial.print(green);
-  
-  cmdMessenger.sendCmdStart(kGetSensorReadings);
+
+  cmdMessenger.sendCmdStart(sensorReadingsResponse);
 
   cmdMessenger.sendCmdBinArg<uint16_t>(blue);
   cmdMessenger.sendCmdBinArg<uint16_t>(red);
