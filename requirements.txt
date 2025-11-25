@@ -1,5 +1,14 @@
 # Core dependencies for MOZART Python Command Driver
 pyserial>=3.5
 PyCmdMessenger>=0.2.4
-
+fastapi
+uvicorn
+pyserial
+pydantic
+httpx
+websockets
+scikit-optimize #correct package instead of skopt
+matplotlib
+numpy
+# pickle is already included
 
