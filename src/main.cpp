@@ -97,14 +97,7 @@ void OnReceiveStop()
 
 void GetSensorReadings()
 {
-  uint16_t myData[ksfAS7343NumChannels]; // Array to hold spectral data
-  int channelsRead = mySensor.getData(myData);
-  for (int channel = 0; channel < channelsRead; channel++)
-  {
-      Serial.print(myData[channel]);
-      Serial.print(",");
-  }
-  
+
   uint16_t blue = mySensor.getBlue();
   uint16_t red = mySensor.getRed();
   uint16_t green = mySensor.getGreen();
