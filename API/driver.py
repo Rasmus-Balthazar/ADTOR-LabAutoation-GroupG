@@ -44,7 +44,7 @@ class RealMicrocontrollerService:
                     ["kGetState", ""],
                     
                     # Command to send the full state of the pumps
-                    ["kGetStateResult", "?I?"], # Unimplemented
+                    ["kGetStateResult", "?I??I??I?"], # Unimplemented
                     
                     # Command to get the current step
                     ["kGetLastStep", ""],
