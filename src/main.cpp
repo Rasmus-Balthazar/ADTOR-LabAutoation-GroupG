@@ -8,6 +8,8 @@ CmdMessenger cmdMessenger(Serial, ',', ';', '/');
 
 SfeAS7343ArdI2C mySensor;
 
+uint16_t myData[ksfAS7343NumChannels]; // Array to hold spectral data
+
 // This is the list of recognized commands. These can be commands that can either be sent or received.
 // In order to receive, attach a callback function to these events
 void OnUnknownCommand();
@@ -97,13 +99,11 @@ void OnReceiveStop()
 
 void GetSensorReadings()
 {
-
   uint16_t blue = mySensor.getBlue();
   uint16_t red = mySensor.getRed();
   uint16_t green = mySensor.getGreen();
 
   cmdMessenger.sendCmdStart(sensorReadingsResponse);
-
   cmdMessenger.sendCmdBinArg<uint16_t>(blue);
   cmdMessenger.sendCmdBinArg<uint16_t>(red);
   cmdMessenger.sendCmdBinArg<uint16_t>(green);
@@ -174,8 +174,6 @@ void setup()
 
 void loop()
 {
-  mySensor.ledOn();
-
   cmdMessenger.feedinSerialData();
   if (currentStep.state)
   {
@@ -196,8 +194,23 @@ void loop()
       Serial.println("Deactivating queue and clearing after done");
     }
   }
+  
+  mySensor.ledOn();
+  // Read all data registers
+  // if it fails, print a failure message and continue
+  if (mySensor.readSpectraDataFromSensor() == false)
+  {
+      Serial.println("Failed to read spectral data.");
+  }
 
   mySensor.ledOff();
+
+  // Get the data from the sensor (all channels)
+  // Note, we are using AutoSmux set to 18 channels
+  // and the data will be written to the myData array
+  // The size of the array is defined in the header file
+  // This method returns the number of channels read
+  int channelsRead = mySensor.getData(myData);
 }
 
 void returnState()
