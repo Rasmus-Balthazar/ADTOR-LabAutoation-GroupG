@@ -98,7 +98,7 @@ void OnReceiveStop()
 }
 
 void GetSensorReadings()
-{
+{ 
   uint16_t blue = mySensor.getBlue();
   uint16_t red = mySensor.getRed();
   uint16_t green = mySensor.getGreen();
@@ -124,50 +124,37 @@ void setup()
   // Attach my application's user-defined callback methods
   attachCommandCallbacks();
 
-  Serial.println("AS7343 Example 02 - All Channels");
 
   Wire.begin();
 
   // Initialize sensor and run default setup.
   if (mySensor.begin() == false)
   {
-    Serial.println("Sensor failed to begin. Please check your wiring!");
-    Serial.println("Halting...");
     while (1)
       ;
   }
 
-  Serial.println("Sensor began.");
 
   // Power on the device
   if (mySensor.powerOn() == false)
   {
-    Serial.println("Failed to power on the device.");
-    Serial.println("Halting...");
     while (1)
       ;
   }
-  Serial.println("Device powered on.");
 
   // Set the AutoSmux to output all 18 channels
   if (mySensor.setAutoSmux(AUTOSMUX_18_CHANNELS) == false)
   {
-    Serial.println("Failed to set AutoSmux.");
-    Serial.println("Halting...");
     while (1)
       ;
   }
-  Serial.println("AutoSmux set to 18 channels.");
 
   // Enable Spectral Measurement
   if (mySensor.enableSpectralMeasurement() == false)
   {
-    Serial.println("Failed to enable spectral measurement.");
-    Serial.println("Halting...");
     while (1)
       ;
   }
-  Serial.println("Spectral measurement enabled.");
 
   cmdMessenger.sendCmd(kAcknowledge, "Arduino has started!");
 }
@@ -177,10 +164,8 @@ void loop()
   cmdMessenger.feedinSerialData();
   if (currentStep.state)
   {
-    // Serial.println("Entering queue");
     if (!currentStep.done)
     {
-      // Serial.println("Step not done");
       if (millis() - currentStep.stepStartTime >= currentStep.time)
       {
         currentStep.done = true;
@@ -191,7 +176,6 @@ void loop()
     else
     {
       currentStep.state = false;
-      Serial.println("Deactivating queue and clearing after done");
     }
   }
   
@@ -200,7 +184,6 @@ void loop()
   // if it fails, print a failure message and continue
   if (mySensor.readSpectraDataFromSensor() == false)
   {
-      Serial.println("Failed to read spectral data.");
   }
 
   mySensor.ledOff();
