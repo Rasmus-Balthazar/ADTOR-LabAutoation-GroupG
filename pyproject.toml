@@ -1,0 +1,18 @@
+[project]
+name = "adtor-labautoation-groupg"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.122.0",
+    "httpx>=0.28.1",
+    "matplotlib>=3.10.7",
+    "numpy>=2.3.5",
+    "pycmdmessenger>=0.2.4",
+    "pydantic>=2.12.4",
+    "pyserial>=3.5",
+    "scikit-optimize>=0.10.2",
+    "uvicorn>=0.38.0",
+    "websockets>=15.0.1",
+]
