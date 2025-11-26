@@ -38,7 +38,7 @@ class Syringe():
 		"""
 		self.drain(self.mL)
 
-		while all([c > 10 for c in self.get_rgb()]):
+		while all([c > 30 for c in self.get_rgb()]):
 			self.add_water(5)
 			self.clean()
 			
@@ -51,10 +51,15 @@ class Syringe():
 	
 	def get_rgb(self):
 		res = requests.get(READINGS)
+		while res is None:
+			res = requests.get(READINGS)
+
 		json = res.json()
 		rgb = json["readings"]
 		while rgb is None:
 			rgb = self.get_rgb()
+		
+		print(f"{rgb = }")
 		return rgb
 
 

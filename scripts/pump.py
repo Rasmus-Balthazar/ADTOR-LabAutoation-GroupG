@@ -9,17 +9,17 @@ STATUS = URL + "status"
 
 
 class Pump():
-	def __init__(self, name, dir = True, speed = 3000):
+	def __init__(self, name, dir = True, speed = 4000):
 		self.name = name
 		self.dir = "true" if dir else "false"
 		self.speed = speed
 
 	def mL_to_seconds(self, mL):
-		res = (1 / self.calc_calibration(23, 40, 3000)) * mL
+		res = (1 / self.calc_calibration(19, 24, 4000)) * mL
 		return int(res)
 
 	def seconds_to_mL(self, s):
-		res = self.calc_calibration(23, 40, 3000) * s
+		res = self.calc_calibration(19, 24, 4000) * s
 		return int(res)
 	
 	def fill(self):
@@ -40,7 +40,7 @@ class Pump():
 						"id": "1", 
 						"time": time*1000
 					 }
-		print(payload)
+		# print(payload)
 		res = requests.post(ACTIONS, json=payload)
 		print(f"Pump is PUMPING for {time} seconds! I will now sleep for", (time) + 1, "seconds.. Zzz...")
 		sleep(time + 1) # Without the 1 extra second, it will not take any further requests after this
