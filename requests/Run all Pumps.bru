@@ -1,0 +1,33 @@
+meta {
+  name: Run all Pumps
+  type: http
+  seq: 1
+}
+
+post {
+  url: 127.0.0.1:8000/actions
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "pumpA": {
+      "state": true,
+      "dir": true,
+      "speed": 2000
+    },
+    "pumpB": {
+      "state": true,
+      "dir": true,
+      "speed": 2000
+    },
+    "pumpC": {
+      "state": true,
+      "dir": true,
+      "speed": 2000
+    },
+    "id": "1",
+    "time": 2000
+  }
+}

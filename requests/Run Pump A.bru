@@ -1,5 +1,5 @@
 meta {
-  name: Simple action
+  name: Run Pump A
   type: http
   seq: 1
 }
@@ -12,12 +12,12 @@ post {
 
 body:json {
   {
-    "body": {
-    "state": true,
-    "dir": true,
-    "speed": 2000
+    "pumpA": {
+      "state": true,
+      "dir": true,
+      "speed": 2000
     },
     "id": "1",
-    "time": 300
+    "time": 1000
   }
 }
