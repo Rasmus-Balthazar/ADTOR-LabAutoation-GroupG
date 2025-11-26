@@ -1,18 +1,19 @@
 import matplotlib.pyplot as plt
 from skopt import callbacks
 from time import time
-
+from scipy.optimize import OptimizeResult
+from tracker import Tracker
 
 class PlotterCallback(callbacks.VerboseCallback):
     fx = None
     ax = None
 
-    def __init__(self, n_total, tracker, n_init=0, n_random=0):
+    def __init__(self, n_total, tracker : Tracker, n_init=0, n_random=0):
         self.n_init = n_init
         self.n_random = n_random
         self.n_total = n_total
         self.iter_no = 1
-        self.tracker = tracker
+        self.tracker : Tracker = tracker
 
         self._start_time = time()
         self._print_info(start=True)
@@ -25,22 +26,11 @@ class PlotterCallback(callbacks.VerboseCallback):
             self.f, self.ax = plt.subplots(figsize=(7, 7))
             plt.pause(0.5)
 
-        if iter_no <= self.n_init:
-            self.ax.plot(iter_no, y, "go")
-            self.f.canvas.draw()
-            plt.pause(0.5)
+        self.ax.plot(iter_no, y, "go")
+        self.f.canvas.draw()
+        plt.pause(0.5)
 
-        elif self.n_init < iter_no <= (self.n_random + self.n_init):
-            self.ax.plot(iter_no, y, "go")
-            self.f.canvas.draw()
-            plt.pause(0.5)
-
-        else:
-            self.ax.plot(iter_no, y, "go")
-            self.f.canvas.draw()
-            plt.pause(0.5)
-
-    def __call__(self, res):
+    def __call__(self, res : OptimizeResult):
         """
         Parameters
         ----------
