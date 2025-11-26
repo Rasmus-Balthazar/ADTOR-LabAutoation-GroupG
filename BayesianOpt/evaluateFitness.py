@@ -1,5 +1,8 @@
 target = [0.5, 0.5, 0.5]
 
+def setTarget(new_target):
+    global target
+    target = new_target
 
 def mixAndMeasure(individual: tuple[int, int, int], generation: int, indvNumber):
     """Given an idea for a mix, run the pumps and return the resulting sensor reading"""
