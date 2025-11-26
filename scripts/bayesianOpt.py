@@ -48,7 +48,7 @@ def main(checkPoint=None):
 
         result = gp_minimize(
             func=eval_fn,
-            dimensions=[(0.0, 5.0), (0.0, 5.0), (0.0, 5.0)],  # the bounds on each dimension of x, this can't be predefined apparently
+            dimensions=[(0.0, 0.0), (0.0, 0.0), (0.0, 20.0)],  # the bounds on each dimension of x, this can't be predefined apparently
             acq_func=acq_fn,
             x0=x0,  # already examined values for x
             y0=y0,  # observed values for x0
@@ -62,7 +62,7 @@ def main(checkPoint=None):
         plotter = PlotterCallback(NSamples, tracker)
         result = gp_minimize(
             evaluate,  # the function to minimize
-            dimensions=[(0.0, 5.0), (0.0, 5.0), (0.0, 5.0)],  # the bounds on each dimension of x
+            dimensions=[(0.0, 0.0), (0.0, 0.0), (0.0, 20.0)],  # the bounds on each dimension of x
             acq_func="LCB",  # the acquisition function (optional)
             n_calls=NSamples,  # number of evaluations of f including at x0
             # n_random_starts=3,  # the number of random initial points
