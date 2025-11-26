@@ -1,7 +1,7 @@
 from syringe import Syringe
 
 
-target = [0.5, 0.5, 0.5]
+target = [0.5, 0.5, 40]
 syringe = Syringe()
 
 def setTarget(new_target):
@@ -10,6 +10,9 @@ def setTarget(new_target):
 
 def mixAndMeasure(individual: tuple[int, int, int], generation: int, indvNumber):
     """Given an idea for a mix, run the pumps and return the resulting sensor reading"""
+
+    syringe.clean()
+    syringe.add_water(20)
 
     print(generation, indvNumber)
     syringe.add_color(individual[2])
