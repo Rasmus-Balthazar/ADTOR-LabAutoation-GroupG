@@ -1,3 +1,4 @@
+import numpy as np
 target = [0.5, 0.5, 0.5]
 
 

@@ -6,10 +6,7 @@ from skopt import gp_minimize
 from skopt.callbacks import CheckpointSaver
 from skopt import load
 from skopt.plots import plot_convergence
-
-
-class Tracker(object):
-    step = 0
+from tracker import Tracker
 
 
 tracker = Tracker()
@@ -22,16 +19,6 @@ noise_level = 0.1
 step = 0
 
 bestFitness = 100000000000
-
-
-def toggle_pause(exception):
-    global pause
-    pause = not pause
-    if pause:
-        print("Paused!")
-    else:
-        print("Unpaused!")
-
 
 def evaluate(sample):
     global pause
@@ -48,7 +35,6 @@ def evaluate(sample):
 
 def main(checkPoint=None):
     # Problem size
-    N = 3  # Sample dimension
     NSamples = 20  # Max number of samples
     checkpoint_saver = CheckpointSaver("./checkpoint.pkl", compress=9)  # keyword arguments will be passed to `skopt.dump`
 
