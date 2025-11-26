@@ -1,38 +1,26 @@
-import math
-import typing
-
 target = [0.5,0.5,0.5]
 
 
-def growAndMeasure(individual,generation,indvNumber): #Call tile functions here
+def mixAndMeasure(individual: tuple[int, int, int], generation: int, indvNumber):
+    """Given an idea for a mix, run the pumps and return the resulting sensor reading"""
     
-    print(generation,indvNumber)
-    grownIndividual = []
-    for i in range(len(individual)):       
-      grownIndividual.append(individual[i])
+    print(generation, indvNumber)
+    grownIndividual = [i for i in individual]
 
-    print("Evaluating: ",grownIndividual)
-    #overallSum = sum(grownIndividual)
+    print("Evaluating:", grownIndividual)
     
-    measure = [grownIndividual[0],grownIndividual[1],grownIndividual[2]]#makeColor(grownIndividual[0],grownIndividual[1],grownIndividual[2])
+    return grownIndividual
 
-    return measure
-
-def evaluate(individual,generation,indvNumber):
+def evaluate(individual: tuple[int, int, int], generation: int, indvNumber) -> float:
       
-      
-      
-      measure = growAndMeasure(individual,generation,indvNumber) #Call a function to start the tiles and return a sensor value 
+    measure = mixAndMeasure(individual, generation, indvNumber) #Call a function to start the pumps and return a sensor value 
 
-      distances  = [10000] * len(target)
+    print(f"{individual = }\n{measure = }\n{target = }")
+    distances = [(t - m) ** 2 for (t, m) in zip(target, measure)]
 
-      for i in range(len(distances)):
-        distances[i] = target[i]-measure[i]
-        distances[i] = distances[i]*distances[i]
+    squaredError = sum(distances)
+    meanSquaredError = squaredError/(len(target))
 
-      errorSum = sum(distances)
-      meanSquaredError = errorSum/(len(target))
-
-      return meanSquaredError
+    return meanSquaredError
 
 
