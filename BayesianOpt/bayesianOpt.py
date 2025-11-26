@@ -5,10 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 import time
-import keyboard
+# import keyboard # doesn't work on aarch mac
 
 from skopt import gp_minimize
-from skopt import callbacks
 from skopt.callbacks import CheckpointSaver
 from skopt import load
 from skopt.plots import plot_convergence
@@ -19,9 +18,10 @@ class Tracker(object):
 
 tracker = Tracker()
 
+SEED = 777
 
 pause = False
-np.random.seed(777)
+np.random.seed(SEED)
 noise_level = 0.1
 step = 0
 
@@ -35,16 +35,16 @@ def toggle_pause(exception):
     else:
         print("Unpaused!")
 
-keyboard.on_press_key("f12", toggle_pause)
+# keyboard.on_press_key("f12", toggle_pause) # This breaks my macbook
 
-def evaluate(individual):
+def evaluate(sample):
     global pause
     global bestFitness
     #print(tracker.step,tracker.step)
     while pause:
         pass
-    fitness = evaluateFitness.evaluate(individual,tracker.step,tracker.step)
-    print(individual,fitness)
+    fitness = evaluateFitness.evaluate(sample, tracker.step, tracker.step)
+    print(sample, fitness)
     if fitness < bestFitness:
         bestFitness = fitness
     return fitness
@@ -53,44 +53,48 @@ def evaluate(individual):
 
 
 
-def main(checkPoint=None):
+def main(checkPoint = None):
 
     # Problem size
     N = 3 #Sample dimension
     NSamples = 20 #Max number of samples
     checkpoint_saver = CheckpointSaver("./checkpoint.pkl", compress=9) # keyword arguments will be passed to `skopt.dump`
+    
+    eval_fn = evaluate                              # the function to minimize
+    acq_fn = "LCB"                                  # the acquisition function (optional)
+    n_initial_points = 5                            # the number of random initialization points
 
-    
-    
     if checkPoint:
         result = load('./checkpoint.pkl')
         evaluationsDone = len(result.x_iters)
         x0 = result.x_iters
         y0 = result.func_vals
 
-        plotter = PlotterCallback(NSamples-evaluationsDone,tracker)
+        plotter = PlotterCallback(NSamples-evaluationsDone, tracker)
 
-        result = gp_minimize(evaluate,            # the function to minimize
-            [(0.0, 5.0),(0.0,5.0),(0.0,5.0)],    # the bounds on each dimension of x
-            x0=x0,              # already examined values for x
-            y0=y0,              # observed values for x0
-            acq_func="LCB",     # the acquisition function (optional)
-            n_calls=NSamples-evaluationsDone,         # number of evaluations of f including at x0
-            n_initial_points=5,  # the number of random initialization points
-            callback=[checkpoint_saver,plotter],
-            random_state=777)
+        result = gp_minimize(
+                func=eval_fn,
+                dimensions=[(0.0, 5.0), (0.0, 5.0), (0.0, 5.0)], # the bounds on each dimension of x, this can't be predefined apparently
+                acq_func=acq_fn,
+                x0=x0,              # already examined values for x
+                y0=y0,              # observed values for x0
+                n_calls=NSamples-evaluationsDone,         # number of evaluations of f including at x0
+                n_initial_points=n_initial_points, 
+                callback = [checkpoint_saver, plotter],        # a list of callbacks including the checkpoint saver
+                random_state=SEED
+            )
 
     else:    
 
         plotter = PlotterCallback(NSamples,tracker)
         result = gp_minimize(evaluate,            # the function to minimize
-            [(0.0, 5.0),(0.0,5.0),(0.0,5.0)],    # the bounds on each dimension of x
+            dimensions = [(0.0, 5.0), (0.0,5.0), (0.0,5.0)],    # the bounds on each dimension of x
             acq_func="LCB",     # the acquisition function (optional)
             n_calls=NSamples,         # number of evaluations of f including at x0
             #n_random_starts=3,  # the number of random initial points
             n_initial_points=5,  # the number of random initial points
             callback=[checkpoint_saver,plotter],# a list of callbacks including the checkpoint saver
-            random_state=777)
+            random_state=SEED)
 
     print(result)
 
