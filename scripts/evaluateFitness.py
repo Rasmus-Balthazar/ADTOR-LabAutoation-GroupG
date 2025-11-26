@@ -1,4 +1,8 @@
+from syringe import Syringe
+
+
 target = [0.5, 0.5, 0.5]
+syringe = Syringe()
 
 def setTarget(new_target):
     global target
@@ -8,8 +12,9 @@ def mixAndMeasure(individual: tuple[int, int, int], generation: int, indvNumber)
     """Given an idea for a mix, run the pumps and return the resulting sensor reading"""
 
     print(generation, indvNumber)
-    grownIndividual = [i for i in individual]
+    syringe.add_color(individual[2])
 
+    grownIndividual = syringe.get_rgb()
     print("Evaluating:", grownIndividual)
 
     return grownIndividual
@@ -20,8 +25,9 @@ def evaluate(individual: tuple[int, int, int], generation: int, indvNumber) -> f
 
     print(f"{individual = }\n{measure = }\n{target = }")
     distances = [(t - m) ** 2 for (t, m) in zip(target, measure)]
+    print(f"Total {distances = }")
 
-    squaredError = sum(distances)
+    squaredError = (target[2]-measure[2])**2
     meanSquaredError = squaredError / (len(target))
 
     return meanSquaredError
