@@ -13,19 +13,15 @@ tracker = Tracker()
 
 SEED = 777
 
-pause = False
 np.random.seed(SEED)
 noise_level = 0.1
 step = 0
 
 bestFitness = 100000000000
 
+
 def evaluate(sample):
-    global pause
     global bestFitness
-    # print(tracker.step,tracker.step)
-    while pause:
-        pass
     fitness = evaluateFitness.evaluate(sample, tracker.step, tracker.step)
     print(sample, fitness)
     if fitness < bestFitness:
