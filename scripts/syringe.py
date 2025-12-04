@@ -36,22 +36,30 @@ class Syringe():
 		Takes ~2min. \\
 		A *dump and pump*, if you will
 		"""
+		self.drain(self.mL)
 
-		self.drain_pump.pump(self.mL)
-		self.mL = 0
-		# self.add_water(20)
-
-		while all([c > 50 for c in self.get_rgb()]):
+		while all([c > 30 for c in self.get_rgb()]):
+			self.add_water(5)
 			self.clean()
 			
 		print("Finished cleaning")
 	
+	def drain(self, mL):
+		mL = min(mL, self.mL)
+		self.drain_pump.pump(self.mL)
+		self.mL -= mL
+	
 	def get_rgb(self):
 		res = requests.get(READINGS)
+		while res is None:
+			res = requests.get(READINGS)
+
 		json = res.json()
 		rgb = json["readings"]
 		while rgb is None:
 			rgb = self.get_rgb()
+		
+		print(f"{rgb = }")
 		return rgb
 
 
