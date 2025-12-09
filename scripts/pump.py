@@ -15,11 +15,11 @@ class Pump():
 		self.speed = speed
 
 	def mL_to_seconds(self, mL):
-		res = (1 / self.calc_calibration(19, 24, 4000)) * mL
+		res = (1 / self.calc_calibration(15, 20, 4000)) * mL
 		return int(res)
 
 	def seconds_to_mL(self, s):
-		res = self.calc_calibration(19, 24, 4000) * s
+		res = self.calc_calibration(15, 20, 4000) * s
 		return int(res)
 	
 	def fill(self):

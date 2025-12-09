@@ -49,7 +49,7 @@ class Syringe():
 		self.drain_pump.pump(self.mL)
 		self.mL -= mL
 	
-	def get_rgb(self):
+	def _get_rgb(self):
 		res = requests.get(READINGS)
 		while res is None:
 			res = requests.get(READINGS)
@@ -59,8 +59,14 @@ class Syringe():
 		while rgb is None:
 			rgb = self.get_rgb()
 		
-		print(f"{rgb = }")
+		print(f" - Single {rgb = }")
 		return rgb
+	
+	def get_rgb(self, sample_num = 10):
+		rgbs = [self._get_rgb() for _ in range(sample_num)]
+		avg_rgb = tuple([int(sum(tup)/sample_num) for tup in zip(*rgbs)])		
+		print(f"Final {avg_rgb = }")
+		return avg_rgb
 
 
     

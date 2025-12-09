@@ -31,7 +31,7 @@ def evaluate(sample):
 
 def main(checkPoint=None):
     # Problem size
-    NSamples = 20  # Max number of samples
+    NSamples = 10  # Max number of samples
     checkpoint_saver = CheckpointSaver("./checkpoint.pkl", compress=9)  # keyword arguments will be passed to `skopt.dump`
 
     eval_fn = evaluate  # the function to minimize
@@ -46,23 +46,11 @@ def main(checkPoint=None):
 
         plotter = PlotterCallback(NSamples - evaluationsDone, tracker)
 
-        result = gp_minimize(
-            func=eval_fn,
-            dimensions=[(0.0, 0.1), (0.0, 0.1), (0.0, 20.0)],  # the bounds on each dimension of x, this can't be predefined apparently
-            acq_func=acq_fn,
-            x0=x0,  # already examined values for x
-            y0=y0,  # observed values for x0
-            n_calls=NSamples - evaluationsDone,  # number of evaluations of f including at x0
-            n_initial_points=n_initial_points,
-            callback=[checkpoint_saver, plotter],  # a list of callbacks including the checkpoint saver
-            random_state=SEED,
-        )
-
     else:
         plotter = PlotterCallback(NSamples, tracker)
         result = gp_minimize(
             evaluate,  # the function to minimize
-            dimensions=[(0.0, 0.1), (0.0, 0.1), (0.0, 20.0)],  # the bounds on each dimension of x
+            dimensions=[(0.0, 20.0), (0.0, 0.1), (0.0, 0.1)],  # the bounds on each dimension of x
             acq_func="LCB",  # the acquisition function (optional)
             n_calls=NSamples,  # number of evaluations of f including at x0
             # n_random_starts=3,  # the number of random initial points
@@ -81,4 +69,4 @@ def main(checkPoint=None):
 
 if __name__ == "__main__":
     # main("checkpoint_gen_9.pkl",True)
-    main()
+    main(True)
